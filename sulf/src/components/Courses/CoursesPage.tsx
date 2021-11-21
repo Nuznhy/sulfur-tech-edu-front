@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import CoursesLogo from '../../images/2.png'
 import { FilterType } from '../../types';
 import { useCourses } from '../Header/hook/useCourses';
 import CoursesList from './CoursesList/CoursesList';
