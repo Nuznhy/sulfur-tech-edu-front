@@ -1,22 +1,41 @@
 
-.navBar
-    height: 100vh
-    width: 200px
-    padding-top: 10px
-    padding-left: 15px
+.navbar
     display: flex
-    flex-direction: column
-    border-right: 1px solid white
-    background-color: #34c78e
+    flex-direction: flex-start
+    align-items: center
 
     .link
-        margin-top: 5px
+        margin-right: 32px
+        font-size: 20px
         text-decoration: none
-        font-size: 18px
-        color: white
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-    .link.active
-        color: #FF5403
+        color: black
+        font-family: 'Comfortaa'
+        font-weight: bold
 
-.full-height
-    height: auto
+    .link.active
+        text-decoration: underline
+        color: #DBF150
+        text-decoration-color: #DBF150
+
+.login-navbar
+    padding: 15px 0
+    margin-right: 15px
+    display: flex
+    flex-direction: flex-start
+    align-items: center
+
+    .login-link
+        padding-left: 5px
+        font-size: 20px
+        text-decoration: none
+        color: black
+
+    .login-link:nth-child(1)
+        padding-right: 5px
+        border-right: 1px solid black
+
+    .login-link.active
+        text-decoration: underline
+        color: #34C78E
+        text-decoration-color: #34C78E
+    

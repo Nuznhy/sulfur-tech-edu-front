@@ -3,7 +3,35 @@
     display: flex
     justify-content: space-between
     align-items: center
-    background-color: #FF7800
+    background-color: #34C78E
+
+    .logo-container
+        display: flex
+        align-items: center
+        border-radius: 50%
+
+        &:hover
+            cursor: pointer
+
+        div
+            width: 70px
+            height: 70px
+
+            img
+                width: 70px
+                height: 70px
+        
+        .title
+            margin-left: 26px
+            font-size: 36px
+            font-family: 'Merienda'
+
+        .yellow-text
+            color: #DBF150
+    
+    .navbar-container
+        display: flex
+
 
     .text
         margin: 0
@@ -13,3 +41,14 @@
     .link
         color: white
         text-decoration: none
+
+.login-menu
+    padding: 15px 15px
+    display: flex
+    justify-content: flex-end
+    align-items: center
+
+.green-bg
+    height: 135px
+    background-image: url('../../images/headerBackground.png')
+    background-repeat: no-repeat

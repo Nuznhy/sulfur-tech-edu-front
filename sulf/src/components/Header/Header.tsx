@@ -1,30 +1,54 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { getIsAuth } from '../../redux/auth-selectors';
-import { FilterType } from '../../types';
-import './Header.sass'
-import SearchInput from './SearchInput/SearchInput';
+import HeaderLogo from '../../images/headerLogo.png';
+import ProfileLogo1 from '../../images/profileLogo1.svg';
+import ProfileLogo2 from '../../images/profileLogo2.svg';
+import NavBar from '../NavBar/NavBar';
+import './Header.sass';
 
-type PropsType = {
-    filter: FilterType;
-    setFilter: (filter: FilterType) => void;
-}
+const Header: React.FC = memo(() => {
+	const isAuth = useSelector(getIsAuth);
 
-const Header: React.FC<PropsType> = memo(({ filter, setFilter }) => {
-    const isAuth = useSelector(getIsAuth);
-
-    return (
-        <div className='header-container'>
-            <p className='text'>Header</p>
-            <SearchInput 
-                value={filter.query}
-                onChange={(e: any) => setFilter({...filter, query: e.target.value})}
-                placeholder="Search..."
-            />
-            {isAuth ? <Link className='link' to='/profile'>Profile</Link> : <Link className='link' to='/authentification'>Login</Link>}
-        </div>
-    );
+	return (
+		<>
+			{isAuth ? (
+				<>
+					<div className='header-container'>
+						<div className='logo-container'>
+							<div>
+								<img alt='' src={HeaderLogo} />
+							</div>
+							<p className='title'>
+								Sulf<span className='yellow-text'>Tech</span>Edu
+							</p>
+						</div>
+						<div className='navbar-container'>
+							<NavBar />
+							<NavLink to='/profile'>
+								<div className='logo-container'>
+									<img alt='' src={ProfileLogo1} />
+								</div>
+							</NavLink>
+						</div>
+					</div>
+					<div className='green-bg'></div>
+				</>
+			) : (
+				<>
+					<div className='login-menu'>
+						<NavBar />
+						<NavLink to='/profile'>
+							<div className='logo-container'>
+								<img alt='' src={ProfileLogo2} />
+							</div>
+						</NavLink>
+					</div>
+				</>
+			)}
+		</>
+	);
 });
 
 export default Header;

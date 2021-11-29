@@ -4,6 +4,8 @@ import { ActionsTypes } from './redux-store';
 
 const initialState = {
 	userId: null as number | null,
+	name: null as string | null,
+	surname: null as string | null,
 	email: null as string | null,
 	password: null as string | null,
 	isAuth: false as boolean,
@@ -30,10 +32,10 @@ const authReducer = (state = initialState, action: ActionsType): InitialStateTyp
 type ActionsType = ActionsTypes<typeof actions>;
 
 export const actions = {
-    setAuthUserData: (userId: number | null, email: string | null, password: string | null, isAuth: boolean) => {
+    setAuthUserData: (userId: number | null, name: string | null, surname: string | null, email: string | null, password: string | null, isAuth: boolean) => {
 		return {
 			type: 'AUTH/SET_USER_DATA',
-			data: { userId, email, password, isAuth },
+			data: { userId, name, surname, email, password, isAuth },
 		} as const;
 	},
 };
@@ -51,12 +53,12 @@ export const authUserThunk = () => {
 	};
 };
 
-export const registration = (email: string, password: string) => {
+export const registration = (name: string, surname: string, email: string, password: string) => {
 	return async (dispatch: DispatchType) => {
 		setTimeout(() => {
-			dispatch(actions.setAuthUserData(1, email, password, true))
+			dispatch(actions.setAuthUserData(1, name, surname, email, password, true))
 			alert('Registration completed')
-		}, 2000);
+		}, 1000);
     };
 };
 
@@ -64,9 +66,9 @@ export const login = (email: string, password: string) => {
 	return async (dispatch: DispatchType) => {
 		if (email === testData.email && password === testData.password) {
 			setTimeout(() => {
-				dispatch(actions.setAuthUserData(1, email, password, true))
+				dispatch(actions.setAuthUserData(1, 'Dan', 'Kosinskiy', email, password, true))
 				alert('Login completed')
-			}, 2000);
+			}, 1000);
 		} else {
 			alert('Login failed')
 		}
@@ -86,7 +88,7 @@ export const login = (email: string, password: string) => {
 
 export const logout = () => {
 	return async (dispatch: DispatchType) => {
-		dispatch(actions.setAuthUserData(null, null, null, false))
+		dispatch(actions.setAuthUserData(null, null, null, null, null, false))
 		//let data = await authAPI.logout();
 		//dispatch(actions.setAuthUserData(null, null, null, false))
 	};

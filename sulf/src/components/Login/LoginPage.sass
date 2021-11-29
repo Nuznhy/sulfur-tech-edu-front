@@ -1,24 +1,61 @@
 .page-container
-    width: 540px
-    margin: 20px auto
-    height: 450px
+    width: 480px
+    margin: 0 auto
+    height: 500px
+
+    .authentication-icon
+        width: 80px
+        height: 80px
+        margin-left: auto
+        margin-right: auto
+
+    .authentication-links
+        display: flex
+        justify-content: space-around
+
+        a
+            margin-top: 88px
+            margin-left: 10px
+            font-size: 30px
+            text-decoration: none
+            color: black
+            font-family: 'Comfortaa'
+            font-weight: bold
+
+        a.active
+            text-decoration: underline
+            color: #34C78E
+            text-decoration-color: #34C78E
 
     .form-container 
         padding: 20px 20px 30px
         height: 50vh
         width: 440px
         margin: 0 auto
-        .avatar-container
+
+        .formik-field
+            margin-top: 45px
+
+        .name-fields
+            display: flex
+            justify-content: space-between
+
+            div
+                width: 200px
+                
+        .btn-container
             text-align: center
-            .avatar 
-                text-align: center
-                margin-left: auto
-                margin-right: auto
-                background-color: #1bbd7e
-        .form-btn
-            margin: 8px 0
+            
+            .form-btn
+                margin: 20px 0
+                padding: 8px 130px
+                font-size: 22px
+                background-color: #34C78E
+                border-radius: 30px
+        
         .form-error 
             color: red
+
         .form-link
             text-decoration: none
     

@@ -1,22 +1,21 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import { compose } from 'redux';
 import { FilterType } from '../../types';
 import { useCourses } from '../Header/hook/useCourses';
+import { withAuthRedirect } from '../hoc/withAuthRedirect';
 import CoursesList from './CoursesList/CoursesList';
 import './CoursesPage.sass';
 import { courses } from './mockedData';
 
-type PropsType = {
-    filter: FilterType;
-}
-
-const CoursesPage: React.FC<PropsType> = memo(({ filter }) => {
+const CoursesPage: React.FC = memo(() => {
+    const [filter, setFilter] = useState({ query: '' });
     const sortedAndSearchedCourses = useCourses(courses, filter.query);
 
     return (
-        <div className='courses-bg'>
+        <div>
             <CoursesList courses={sortedAndSearchedCourses}/>
         </div>
     );
 });
 
-export default CoursesPage;
+export default compose<React.ComponentType>(withAuthRedirect)(CoursesPage);

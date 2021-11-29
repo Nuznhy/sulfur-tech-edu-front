@@ -20,7 +20,7 @@ const CoursesList: React.FC<PropsType> = memo(({ courses }) => {
 
     return (
         <div className='courses-list-container'>
-            <p className='slogan'>Join us to teach and study</p>
+            <p className='slogan'>Join us to <span className='green-text'>teach</span> and <span className='green-text'>study</span></p>
                 <TransitionGroup>
                     {courses.map(course =>
                         <CSSTransition

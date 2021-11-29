@@ -1,23 +1,17 @@
 import React, { memo } from 'react';
-import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Grid, Avatar, TextField, Button, Typography, Link } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { TextField, Button } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import { login } from '../../redux/auth-reducer';
 import './LoginPage.sass'
-
-type PropsType = {
-	login: (email: string, password: string) => void,
-	handleChange: (event: any, newValue: number) => void
-}
 
 type FormTypes = {
 	email: string;
 	password: string;
 };
 
-const Login: React.FC<PropsType> = memo(({ login, handleChange }) => {
+const Login: React.FC = memo(() => {
 	const dispatch = useDispatch()
 
 	const initialValues: FormTypes = {
@@ -32,27 +26,19 @@ const Login: React.FC<PropsType> = memo(({ login, handleChange }) => {
 
 	const onSubmit = (values: FormTypes, props: any) => {
 		dispatch(login(values.email, values.password))
-		setTimeout(() => {
-			props.resetForm();
-			props.setSubmitting(false);
-		}, 1000);
+		props.resetForm();
+		props.setSubmitting(false);
 	};
 
 	return (
-		<Grid>
+		<>
 			<div className='form-container'>
-				<Grid className='avatar-container'>
-					<Avatar className='avatar'>
-						<LockOutlinedIcon />
-					</Avatar>
-					<h2>Sign In</h2>
-				</Grid>
 				<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 					{(props) => (
 						<Form>
 							<Field
 								as={TextField}
-								label='Email'
+								className='formik-field'
 								name='email'
 								placeholder='Enter email'
 								fullWidth
@@ -61,7 +47,7 @@ const Login: React.FC<PropsType> = memo(({ login, handleChange }) => {
 							{props.errors.email || props.touched.email ? <div className='form-error'>{props.errors.email}</div> : null}
 							<Field
 								as={TextField}
-								label='Password'
+								className='formik-field'
 								name='password'
 								placeholder='Enter password'
 								type='password'
@@ -69,25 +55,16 @@ const Login: React.FC<PropsType> = memo(({ login, handleChange }) => {
 								required
 							/>
 							{props.errors.password || props.touched.password ? <div className='form-error'>{props.errors.password}</div> : null}
-							<Button className='form-btn' type='submit' color='primary' variant='contained' disabled={props.isSubmitting} fullWidth>
-								{props.isSubmitting ? 'Loading' : 'Sign in'}
-							</Button>
+							<div className='btn-container'>
+								<Button className='form-btn' type='submit' variant='contained' disabled={props.isSubmitting} >
+									{props.isSubmitting ? 'Loading' : 'Sign In'}
+								</Button>
+							</div>
 						</Form>
 					)}
 				</Formik>
-				<Typography>
-					<Link href='#' className='form-link'>Forgot password?</Link>
-				</Typography>
-				<Typography onClick={() => {handleChange('', 1)}}>
-					{' '}
-					Don't have an account?
-					{' '}
-					<NavLink to='/authentification/registration' className='form-link'>
-						Sign Up
-					</NavLink>
-				</Typography>
 			</div>
-		</Grid>
+		</>
 	);
 });
 
