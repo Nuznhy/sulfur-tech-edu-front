@@ -3,8 +3,13 @@ export type CourseType = {
     title: string;
     image: string;
     description: string;
+    price: number;
+    rating: number;
 }
 
 export type FilterType = {
     query: string;
+    minPrice: string;
+    maxPrice: string;
+    rating: string;
 }
