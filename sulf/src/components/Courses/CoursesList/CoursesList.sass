@@ -1,23 +1,8 @@
 .warn-text
     text-align: center
-
-.course-enter 
-    transform: translateX(-350px)
-
-.course-enter-active 
-    transform: translateX(0px)
-    transition: all 500ms ease-in
-
-.course-exit 
-    opacity: 1
-
-.course-exit-active 
-    transform: translateX(-350px)
-    transition: all 500ms ease-in
-
     
 .courses-list-container
-    margin-top: 30px
+    margin: 30px 0px
     text-align: center
     padding-right: 50px
     padding-left: 50px
@@ -33,36 +18,88 @@
 
     .wrapper 
         display: flex
-        text-align: left
-        margin-bottom: 20px
-        border: 1px solid white
-        border-radius: 10px
+        flex-wrap: wrap
+        justify-content: space-between
+
+        .item
+            margin-top: 30px
+            width: 360px
+
+    .photo-container
+        position: relative
+        top: 60px
+        margin-right: auto
+        margin-left: auto
+        width: 140px
+        height: 140px
+        border-radius: 50%
+        box-shadow: 0 0 10px #888888
+        background-color: white
+        
+        &::after
+            position: absolute
+            content: ""
+            left: -30px
+            top: 80px
+            width: 150%
+            height: 55%
+            z-index: 0
+            background: white
 
         &:hover
             cursor: pointer
-
-
-    .photo-container
-        width: 120px
-        height: 120px
         
         img
+            position: relative
+            margin-top: 10px
             width: 120px
             height: 120px
             object-fit: cover
-            border-radius: 10px
+            z-index: 1
+            border-radius: 50%
 
     .text-container
-        margin-left: 15px
+        padding: 70px 40px 20px
+        max-width: 270px
+        margin-right: auto
+        margin-left: auto
+        border-radius: 20px
+        box-shadow: 0px 0px 10px #888888
+        
+        &:hover
+            cursor: pointer
+    
+        p
+            font-family: 'Merienda'
+            margin: 0
+
+        .title-text
+            font-size: 26px
+
+        .description
+            margin-top: 10px
+            font-family: 'Comfortaa'
+
+        .price
+            margin-top: 8px
+        
+        .rating
+            display: flex
+            align-items: center
+
+        .heart-icons
+            margin-top: 6px
+            margin-left: 6px
+
+        .left-align
+            text-align: left
 
         .bold-text
             font-weight: 600
 
-        .description
-            margin-top: 10px
+        
             
-        p
-            margin: 0
+        
             
 
     

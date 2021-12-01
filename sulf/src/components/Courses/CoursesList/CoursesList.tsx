@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { CourseType, FilterType } from '../../../types';
 import CoursesFilter from '../CoursesFilter/CoursesFilter';
+import StyledRating from '../CoursesFilter/RatingFilter/StyledRating';
 import './CoursesList.sass';
 
 type PropsType = {
@@ -23,31 +23,32 @@ const CoursesList: React.FC<PropsType> = memo(({ courses, filter, setFilter }) =
 			{!courses.length ? (
 				<h2 className='warn-text'>Courses not found!</h2>
 			) : (
-				<TransitionGroup>
+				<div className='wrapper'>
 					{courses.map((course) => (
-						<CSSTransition key={course.id} timeout={500} classNames='course'>
-							<div key={course.id} className='wrapper' onClick={() => history.push(`/courses/${course.id}`)}>
-								<div className='photo-container'>
-									<img alt='' src={course.image} />
-								</div>
-								<div className='text-container'>
-									<p className='title'>
-										<span className='bold-text'>Name:</span> {course.title}
-									</p>
-									<p className='description'>
-										<span className='bold-text'>Description:</span> {course.description}
-									</p>
-                                    <p>
-                                        Price: {course.price}
-                                    </p>
-                                    <p>
-                                        Rating: {course.rating}
-                                    </p>
-								</div>
+						<div key={course.id} className='item'>
+							<div className='photo-container' onClick={() => history.push(`/courses/${course.id}`)}>
+								<img alt='' src={course.image} />
 							</div>
-						</CSSTransition>
+							<div className='text-container' onClick={() => history.push(`/courses/${course.id}`)}>
+								<p className='title'>
+									<span className='title-text bold-text'>{course.title}</span>
+								</p>
+								<p className='description'>
+									{course.description.length < 220 ? course.description : `${course.description.substr(0, 220)}...`}
+								</p>
+								<p className='price left-align'>
+									<span className='bold-text'>Price:</span> {course.price}
+								</p>
+								<p className='rating left-align'>
+									<span className='bold-text'>Rating:</span>
+									<div className='heart-icons'>
+										<StyledRating value={course.rating.toString()} />
+									</div>
+								</p>
+							</div>
+						</div>
 					))}
-				</TransitionGroup>
+				</div>
 			)}
 		</div>
 	);

@@ -5,6 +5,7 @@ import { actions } from '../../../redux/user-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserCourses } from '../../../redux/user-selectors';
 import './CoursesItem.sass';
+import BackButton from '../BackButton/BackButton';
 
 const CoursesItem = memo(() => {
 	const history = useHistory();
@@ -29,6 +30,7 @@ const CoursesItem = memo(() => {
 			<div className='photo-container'>
 				<img alt='' src={course.image} />
 			</div>
+			<BackButton />
 			<div className='text-container'>
 				<p className='title'>
 					<span className='bold-text'>Name:</span> {course.title}
