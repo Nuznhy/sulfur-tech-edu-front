@@ -1,36 +1,66 @@
 import React, { memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { getCourseById } from '../mockedData';
-import { actions } from '../../../redux/user-reducer';
-import { useDispatch, useSelector } from 'react-redux';
+import { addUserCourse, removeUserCourse } from '../../../redux/user-reducer';
+import { useSelector } from 'react-redux';
 import { getUserCourses } from '../../../redux/user-selectors';
 import './CoursesItem.sass';
-import BackButton from '../BackButton/BackButton';
+import { getIsAuth, getUserId, getUserRole } from '../../../redux/auth-selectors';
+import { CourseType } from '../../../types';
+import CourseForm from '../CourseForm/CourseForm';
 
 const CoursesItem = memo(() => {
+	const isAuth = useSelector(getIsAuth);
+	const userId = useSelector(getUserId);
+	const isAdmin = useSelector(getUserRole) === 'admin';
+
 	const history = useHistory();
-	const dispatch = useDispatch();
 	const course = getCourseById(Number(history.location.pathname.split('/')[2]))[0];
 
 	const userCourses = useSelector(getUserCourses);
 	const isCurrentCourse = userCourses.find((c) => c.id === course.id);
 
 	const handleAddCourse = () => {
-		dispatch(actions.addUserCourses(course));
+		addUserCourse(userId, course.id);
 		alert('You have successfully enrolled in this course');
 	};
 
 	const handleDeleteCourse = () => {
-		dispatch(actions.removeUserCourses(course.id));
+		removeUserCourse(userId, course.id);
 		alert('You have successfully removed this course');
 	};
 
+	if (!isAuth) return <Redirect to='/authentication/login' />;
+
+	return (
+		<div className='container'>
+			{isAdmin ? (
+				<CourseForm course={course} />
+			) : (
+				<CourseInfo
+					course={course}
+					isCurrentCourse={isCurrentCourse}
+					handleAddCourse={handleAddCourse}
+					handleDeleteCourse={handleDeleteCourse}
+				/>
+			)}
+		</div>
+	);
+});
+
+type CourseInfoType = {
+	course: CourseType;
+	isCurrentCourse: CourseType | undefined;
+	handleAddCourse: () => void;
+	handleDeleteCourse: () => void;
+};
+
+const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleAddCourse, handleDeleteCourse }) => {
 	return (
 		<div className='course'>
 			<div className='photo-container'>
 				<img alt='' src={course.image} />
 			</div>
-			<BackButton />
 			<div className='text-container'>
 				<p className='title'>
 					<span className='bold-text'>Name:</span> {course.title}
@@ -55,6 +85,6 @@ const CoursesItem = memo(() => {
 			</div>
 		</div>
 	);
-});
+};
 
 export default CoursesItem;

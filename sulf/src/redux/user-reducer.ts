@@ -1,43 +1,57 @@
 import { CourseType } from '../types';
 import { ActionsTypes } from './redux-store';
+import { Dispatch } from 'redux';
 
 const initialState = {
-	courses: [] as Array<CourseType> | [],
+	userCourses: [] as Array<CourseType> | [],
 };
 
 type InitialStateType = typeof initialState;
 
 const userReducer = (state = initialState, action: ActionsType): InitialStateType => {
 	switch (action.type) {
-		case 'USER/ADD_USER_COURSE':
+		case 'USER/GET_COURSES':
 			return {
 				...state,
-				courses: [...state.courses, action.data.course]
-			}
-        case 'USER/REMOVE_USER_COURSE':
-            return {
-                ...state,
-                courses: [...state.courses.filter(c => c.id !== action.data.courseId)]
-            }
+				userCourses: [...action.data.courses],
+			};
 		default:
 			return state;
 	}
 };
+
 type ActionsType = ActionsTypes<typeof actions>;
 
 export const actions = {
-	addUserCourses: (course: CourseType) => {
+	getUserCourse: (courses: Array<CourseType>) => {
 		return {
-			type: 'USER/ADD_USER_COURSE',
-			data: { course },
+			type: 'USER/GET_COURSES',
+			data: { courses },
 		} as const;
 	},
-	removeUserCourses: (courseId: number) => {
-		return {
-			type: 'USER/REMOVE_USER_COURSE',
-			data: { courseId },
-		} as const;
-	},
+};
+
+type DispatchType = Dispatch<ActionsType>;
+
+export const getUserCourses = (userId: number | null) => {
+	return async (dispatch: DispatchType) => {
+		//const data = await courseAPI.getUserCourses(userId);
+		//dispatch(actions.getAllCourse(courses: data));
+	};
+};
+
+export const addUserCourse = (userId: number | null, courseId: number) => {
+	return async (dispatch: DispatchType) => {
+		//const data = await courseAPI.addUserCourse(userId, courseId);
+		//getUserCourses(userId);
+	};
+};
+
+export const removeUserCourse = (userId: number | null, courseId: number) => {
+	return async (dispatch: DispatchType) => {
+		//const data = await courseAPI.removeUserCourse(userId, courseId);
+		getUserCourses(userId);
+	};
 };
 
 export default userReducer;

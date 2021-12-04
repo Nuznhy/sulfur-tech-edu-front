@@ -6,10 +6,18 @@ import HeaderLogo from '../../images/headerLogo.png';
 import ProfileLogo1 from '../../images/profileLogo1.svg';
 import ProfileLogo2 from '../../images/profileLogo2.svg';
 import NavBar from '../NavBar/NavBar';
+import { useLocation } from 'react-router';
+import classNames from 'classnames';
 import './Header.sass';
 
 const Header: React.FC = memo(() => {
 	const isAuth = useSelector(getIsAuth);
+	const searchQuery = useLocation().pathname.split('/')[1]
+
+	let headerClasses = classNames({
+        'green-bg': true,
+        'hidden': searchQuery === 'create-course' || searchQuery === 'courses',
+    })
 
 	return (
 		<>
@@ -33,7 +41,7 @@ const Header: React.FC = memo(() => {
 							</NavLink>
 						</div>
 					</div>
-					<div className='green-bg'></div>
+					<div className={headerClasses}></div>
 				</>
 			) : (
 				<>

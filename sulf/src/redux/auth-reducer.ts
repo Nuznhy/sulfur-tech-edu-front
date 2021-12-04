@@ -8,6 +8,7 @@ const initialState = {
 	surname: null as string | null,
 	email: null as string | null,
 	password: null as string | null,
+	userRole: 'admin' as string | null,
 	isAuth: false as boolean,
 };
 

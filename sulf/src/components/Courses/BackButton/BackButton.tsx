@@ -11,7 +11,7 @@ const BackButton: React.FC = memo(() => {
             <div className='btn-img' onClick={() => history.goBack()}>
                 <img alt='' src={BackArrow}/>
             </div>
-            <p className='btn-text'></p>
+            <p className='btn-text'>Back</p>
         </div>
     );
 });

@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { getIsAuth } from '../../redux/auth-selectors';
 import './NavBar.sass';
 
@@ -23,13 +23,13 @@ const NavBar: React.FC = memo(() => {
 				</div>
 			) : (
 				<div className='login-navbar'>
-          <NavLink to='/authentication/login' className='login-link'>
+					<NavLink to='/authentication/login' className='login-link'>
 						Log In
 					</NavLink>
-          <NavLink to='/authentication/registration' className='login-link'>
+					<NavLink to='/authentication/registration' className='login-link'>
 						Sign Up
 					</NavLink>
-        </div>
+				</div>
 			)}
 		</>
 	);

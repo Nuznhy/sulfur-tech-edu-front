@@ -1,9 +1,11 @@
 import React, { memo } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { getUserRole } from '../../../redux/auth-selectors';
 import { CourseType, FilterType } from '../../../types';
 import CoursesFilter from '../CoursesFilter/CoursesFilter';
-import StyledRating from '../CoursesFilter/RatingFilter/StyledRating';
 import './CoursesList.sass';
+import ListItem from './ListItem'
 
 type PropsType = {
 	courses: Array<CourseType>;
@@ -13,6 +15,7 @@ type PropsType = {
 
 const CoursesList: React.FC<PropsType> = memo(({ courses, filter, setFilter }) => {
 	const history = useHistory();
+	const isAdmin = useSelector(getUserRole) === 'admin';
 
 	return (
 		<div className='courses-list-container'>
@@ -20,33 +23,13 @@ const CoursesList: React.FC<PropsType> = memo(({ courses, filter, setFilter }) =
 				Join us to <span className='green-text'>teach</span> and <span className='green-text'>study</span>
 			</p>
 			<CoursesFilter filter={filter} setFilter={setFilter} />
+			{isAdmin && <button onClick={() => history.push(`/create-course`)}>Create Course</button>}
 			{!courses.length ? (
 				<h2 className='warn-text'>Courses not found!</h2>
 			) : (
 				<div className='wrapper'>
 					{courses.map((course) => (
-						<div key={course.id} className='item'>
-							<div className='photo-container' onClick={() => history.push(`/courses/${course.id}`)}>
-								<img alt='' src={course.image} />
-							</div>
-							<div className='text-container' onClick={() => history.push(`/courses/${course.id}`)}>
-								<p className='title'>
-									<span className='title-text bold-text'>{course.title}</span>
-								</p>
-								<p className='description'>
-									{course.description.length < 220 ? course.description : `${course.description.substr(0, 220)}...`}
-								</p>
-								<p className='price left-align'>
-									<span className='bold-text'>Price:</span> {course.price}
-								</p>
-								<p className='rating left-align'>
-									<span className='bold-text'>Rating:</span>
-									<div className='heart-icons'>
-										<StyledRating value={course.rating.toString()} />
-									</div>
-								</p>
-							</div>
-						</div>
+						<ListItem course={course}/>
 					))}
 				</div>
 			)}

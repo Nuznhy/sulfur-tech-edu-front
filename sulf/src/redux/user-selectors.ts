@@ -1,5 +1,5 @@
-import { AppStateType } from "./redux-store"
+import { AppStateType } from './redux-store';
 
 export const getUserCourses = (state: AppStateType) => {
-    return state.user.courses
-}
+	return state.user.userCourses;
+};

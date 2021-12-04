@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { useLocation } from 'react-router';
+import classNames from 'classnames';
 import './Footer.sass'
 
-let classNames = require('classnames');
 
 const Footer: React.FC = memo(() => {
     const searchQuery = useLocation().pathname.split('/')[1]
