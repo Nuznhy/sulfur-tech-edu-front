@@ -13,6 +13,7 @@ import CoursesPage from './components/Courses/CoursesPage';
 import Header from './components/Header/Header';
 import CoursesItem from './components/Courses/CoursesItem/CoursesItem';
 import Footer from './components/Footer/Footer';
+import CourseForm from './components/Courses/CourseForm/CourseForm';
 
 const App: React.FC = memo(() => {
 	const isAuth = useSelector(getIsAuth)
@@ -32,6 +33,7 @@ const App: React.FC = memo(() => {
 						<Route path='/authentication' render={() => <SignInOutContainer />} />
 						<Route path='/profile' render={() => <Profile />} />
 						<Route exact path='/courses' render={() => <CoursesPage />} />
+						<Route exact path='/create-course' render={() => <CourseForm />} />
 						<Route exact path='/courses/:id' render={() => <CoursesItem />} />
 						<Route path='*' render={() => <div>404 Not found</div>} />
 					</Switch>
