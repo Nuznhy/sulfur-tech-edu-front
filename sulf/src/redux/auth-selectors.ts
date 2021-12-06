@@ -8,6 +8,10 @@ export const getUserId = (state: AppStateType) => {
 	return state.auth.userId;
 };
 
+export const getUserName = (state: AppStateType) => {
+	return state.auth.name;
+};
+
 export const getUserEmail = (state: AppStateType) => {
 	return state.auth.email;
 };

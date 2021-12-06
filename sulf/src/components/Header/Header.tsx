@@ -12,12 +12,12 @@ import './Header.sass';
 
 const Header: React.FC = memo(() => {
 	const isAuth = useSelector(getIsAuth);
-	const searchQuery = useLocation().pathname.split('/')[1]
+	const searchQuery = useLocation().pathname.split('/')[1];
 
 	let headerClasses = classNames({
-        'green-bg': true,
-        'hidden': searchQuery === 'create-course' || searchQuery === 'courses',
-    })
+		'green-bg': true,
+		hidden: searchQuery === 'create-course' || searchQuery === 'courses' || searchQuery === 'profile',
+	});
 
 	return (
 		<>

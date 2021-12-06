@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { useHistory } from 'react-router';
 import { CourseType } from '../../../types';
 import StyledRating from '../CoursesFilter/RatingFilter/StyledRating';
-import './ListItem.sass'
+import './ListItem.sass';
 
 type PropsType = {
     course: CourseType;
@@ -14,7 +14,7 @@ const ListItem: React.FC<PropsType> = memo(({ course }) => {
     return (
         <div key={course.id} className='item'>
             <div className='photo-container' onClick={() => history.push(`/courses/${course.id}`)}>
-                <img alt='' src={course.image} />
+                <img alt='' src={course.image} className={history.location.pathname === '/profile' ? 'left-margin' : ''}/>
             </div>
             <div className='text-container' onClick={() => history.push(`/courses/${course.id}`)}>
                 <p className='title'>
