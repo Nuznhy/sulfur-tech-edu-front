@@ -35,11 +35,21 @@ export type getUserDataResponseType = {
 };
 
 export type getCoursesResponseType = {
-	data: {
-		success: string;
-		items_total: number;
-		page_count: number;
-		courses: Array<CourseType>;
-	},
-	status: number,
-}
+	success: string;
+	items_total: number;
+	page_count: number;
+	courses: Array<CourseType>;
+	status: number;
+};
+
+export type getCourseByIdResponseType = {
+	success: string;
+	course: CourseType;
+	status: number;
+};
+
+export type deleteCourseByIdResponseType = {
+	success: string;
+	message: string;
+	status: number;
+};

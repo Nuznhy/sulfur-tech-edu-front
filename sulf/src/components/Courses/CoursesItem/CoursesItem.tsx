@@ -1,40 +1,64 @@
-import React, { memo } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
-import { getCourseById } from '../mockedData';
+import React, { memo, useEffect, useState } from 'react';
+import { useHistory, Redirect, useLocation } from 'react-router-dom';
 import { addUserCourse, removeUserCourse } from '../../../redux/user-reducer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserCourses } from '../../../redux/user-selectors';
 import './CoursesItem.sass';
-import { getIsAuth, getUserId, getUserRole } from '../../../redux/auth-selectors';
+import { getIsAuth, getUserRole } from '../../../redux/auth-selectors';
 import { CourseType } from '../../../types';
 import CourseForm from '../CourseForm/CourseForm';
+import { courseAPI } from '../../../service/api/course-api';
 
 const CoursesItem = memo(() => {
+	const [course, setCourse] = useState<CourseType>({
+		course_id: 0,
+		course_name: '',
+		course_price: 0,
+		course_description: '',
+		create_time: '',
+		rating: 0,
+		creator_id: 0,
+		image: '',
+	});
+	const [isLoading, setIsLoading] = useState(false);
 	const isAuth = useSelector(getIsAuth);
-	const userId = useSelector(getUserId);
 	const isAdmin = useSelector(getUserRole) === 'admin';
 
+	const dispatch = useDispatch();
 	const history = useHistory();
-	const course = getCourseById(Number(history.location.pathname.split('/')[2]))[0];
+	const location = useLocation();
 
 	const userCourses = useSelector(getUserCourses);
 	const isCurrentCourse = userCourses.find((c) => c.course_id === course.course_id);
 
+	useEffect(() => {
+		fetchCourse();
+	}, [location]);
+
+	const fetchCourse = async () => {
+		setIsLoading(true);
+		const res = await courseAPI.getCourseById(Number(history.location.pathname.split('/')[2]));
+		setCourse(res.data.course);
+		setIsLoading(false);
+	};
+
 	const handleAddCourse = () => {
-		addUserCourse(userId, course.course_id);
-		alert('You have successfully enrolled in this course');
+		dispatch(addUserCourse(course.course_id));
+		history.push('/courses');
 	};
 
 	const handleDeleteCourse = () => {
-		removeUserCourse(userId, course.course_id);
-		alert('You have successfully removed this course');
+		dispatch(removeUserCourse(course.course_id));
+		history.push('/courses');
 	};
 
 	if (!isAuth) return <Redirect to='/authentication/login' />;
 
 	return (
 		<div className='container'>
-			{isAdmin ? (
+			{isLoading ? (
+				<div>Loading</div>
+			) : isAdmin ? (
 				<CourseForm course={course} />
 			) : (
 				<CourseInfo

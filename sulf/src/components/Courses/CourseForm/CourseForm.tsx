@@ -2,12 +2,12 @@ import React, { memo } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { Button } from '@material-ui/core';
 import * as Yup from 'yup';
-import { addCourse, updateCourse } from '../../../redux/admin-reducer';
+import { addCourse, removeCourse, updateCourse } from '../../../redux/admin-reducer';
 import { CourseType } from '../../../types';
 import { getCourseById } from '../mockedData';
-import './CourseForm.sass'
-import { Redirect } from 'react-router';
-import { useSelector } from 'react-redux';
+import './CourseForm.sass';
+import { Redirect, useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { getIsAuth } from '../../../redux/auth-selectors';
 import BackButton from '../BackButton/BackButton';
 
@@ -22,8 +22,10 @@ type PropsType = {
 };
 
 const CourseForm: React.FC<PropsType> = memo(({ course }) => {
-    const mockedCourse = getCourseById(1)[0];
+	const mockedCourse = getCourseById(1)[0];
 	const isAuth = useSelector(getIsAuth);
+	const dispatch = useDispatch();
+	const history = useHistory();
 
 	const initialValues: FormTypes = {
 		title: course ? course.course_name : '',
@@ -37,29 +39,44 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 		price: Yup.string().required('Required'),
 	});
 
+	const onDeleteCourse = () => {
+		course && dispatch(removeCourse(course.course_id));
+		history.push('/courses');
+	};
+
+	const onUpdateCourse = (id: number, title: string, description: string, price: number) => {
+		dispatch(updateCourse(id, title, description, price));
+		history.push('/courses');
+	};
+
+	const onAddCourse = (title: string, description: string, price: number) => {
+		dispatch(addCourse(title, description, price));
+		history.push('/courses');
+	};
+
 	const onSubmit = (values: FormTypes, props: any) => {
 		const { title, description, price } = values;
-		course ? updateCourse(course.course_id, title, description, price) : addCourse(title, description, price);
+		course ? onUpdateCourse(course.course_id, title, description, Number(price)) : onAddCourse(title, description, Number(price));
 		props.resetForm();
 		props.setSubmitting(false);
 	};
 
-    if (!isAuth) return <Redirect to='/authentication/login' />;
+	if (!isAuth) return <Redirect to='/authentication/login' />;
 
 	return (
 		<div className={`${course ? '' : 'container'}`}>
-            <BackButton />
+			<BackButton />
 			<div className='course'>
 				<div className='photo-container'>
-					<img alt='' src={mockedCourse.image} />
+					<img alt='' src={course ? course.image : mockedCourse.image} />
 				</div>
 				<div className='create-course'>
-                    {!course &&
-                        <>
-                            <p className='title'>New course</p>
-                            <p className='text'>*necessarily</p>
-                        </>
-                    }
+					{!course && (
+						<>
+							<p className='title'>New course</p>
+							<p className='text'>*necessarily</p>
+						</>
+					)}
 					<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 						{(props) => (
 							<Form className='form-container'>
@@ -80,6 +97,16 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 									<Button className='form-btn' type='submit' variant='contained' disabled={props.isSubmitting}>
 										{props.isSubmitting ? 'Loading' : course ? 'Edit course' : 'Add course'}
 									</Button>
+									{course && (
+										<Button
+											className='form-btn red-color'
+											onClick={onDeleteCourse}
+											variant='contained'
+											disabled={props.isSubmitting}
+										>
+											{props.isSubmitting ? 'Loading' : 'Delete course'}
+										</Button>
+									)}
 								</div>
 							</Form>
 						)}

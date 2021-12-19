@@ -1,25 +1,42 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { compose } from 'redux';
 import { logout } from '../../redux/auth-reducer';
 import { getUserName } from '../../redux/auth-selectors';
-import { getUserCourses } from '../../redux/user-selectors';
 import { withAuthRedirect } from '../hoc/withAuthRedirect';
 import ListItem from '../Courses/CoursesList/ListItem';
 import ProfileIcon from '../../images/profileIcon.png';
 import { Button } from '@material-ui/core';
 import './Profile.sass';
+import { getAllUserCourses } from '../../redux/user-reducer';
+import { courseAPI } from '../../service/api/course-api';
+import { CourseType } from '../../types';
 
 const Profile: React.FC = memo(() => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [userCourses, setUserCourses] = useState<Array<CourseType>>([]);
 	const userName = useSelector(getUserName);
-	const userCourses = useSelector(getUserCourses);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		fetchCourser();
+	}, []);
 
 	const onLogout = () => {
 		dispatch(logout());
 	};
 
-	return (
+	const fetchCourser = async () => {
+		setIsLoading(true);
+		const res = await courseAPI.getUserCourses();
+		setUserCourses([...res.data.courses]);
+		dispatch(getAllUserCourses());
+		setIsLoading(false);
+	};
+
+	return isLoading ? (
+		<div>Loading</div>
+	) : (
 		<div className='profile-container'>
 			<div className='avatar-container'>
 				<img alt='' src={ProfileIcon} />

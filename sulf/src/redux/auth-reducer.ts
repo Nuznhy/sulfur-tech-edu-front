@@ -28,6 +28,11 @@ const authReducer = (state = initialState, action: ActionsType): InitialStateTyp
 				...state,
 				...action.data,
 			};
+		case 'AUTH/SET_USER_AUTH':
+			return {
+				...state,
+				isAuth: action.data,
+			};
 		default:
 			return state;
 	}
@@ -38,6 +43,12 @@ export const actions = {
 		return {
 			type: 'AUTH/SET_USER_DATA',
 			data: { ...data, isAuth },
+		} as const;
+	},
+	setAuthUser: (isAuth: boolean) => {
+		return {
+			type: 'AUTH/SET_USER_AUTH',
+			data: isAuth,
 		} as const;
 	},
 };
