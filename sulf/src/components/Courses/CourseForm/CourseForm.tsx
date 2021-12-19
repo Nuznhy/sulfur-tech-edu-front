@@ -26,9 +26,9 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 	const isAuth = useSelector(getIsAuth);
 
 	const initialValues: FormTypes = {
-		title: course ? course.title : '',
-		description: course ? course.description : '',
-		price: course ? course.price.toString() : '',
+		title: course ? course.course_name : '',
+		description: course ? course.course_description : '',
+		price: course ? course.course_price.toString() : '',
 	};
 
 	const validationSchema = Yup.object().shape({
@@ -39,7 +39,7 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 
 	const onSubmit = (values: FormTypes, props: any) => {
 		const { title, description, price } = values;
-		course ? updateCourse(course.id, title, description, price) : addCourse(title, description, price);
+		course ? updateCourse(course.course_id, title, description, price) : addCourse(title, description, price);
 		props.resetForm();
 		props.setSubmitting(false);
 	};

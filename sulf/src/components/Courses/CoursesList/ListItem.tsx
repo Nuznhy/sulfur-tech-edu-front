@@ -12,19 +12,19 @@ const ListItem: React.FC<PropsType> = memo(({ course }) => {
     const history = useHistory();
 
     return (
-        <div key={course.id} className='item'>
-            <div className='photo-container' onClick={() => history.push(`/courses/${course.id}`)}>
+        <div key={course.course_id} className='item'>
+            <div className='photo-container' onClick={() => history.push(`/courses/${course.course_id}`)}>
                 <img alt='' src={course.image} className={history.location.pathname === '/profile' ? 'left-margin' : ''}/>
             </div>
-            <div className='text-container' onClick={() => history.push(`/courses/${course.id}`)}>
+            <div className='text-container' onClick={() => history.push(`/courses/${course.course_id}`)}>
                 <p className='title'>
-                    <span className='title-text bold-text'>{course.title}</span>
+                    <span className='title-text bold-text'>{course.course_name}</span>
                 </p>
                 <p className='description'>
-                    {course.description.length < 220 ? course.description : `${course.description.substr(0, 220)}...`}
+                    {course.course_description.length < 220 ? course.course_description : `${course.course_description.substr(0, 220)}...`}
                 </p>
                 <p className='price left-align'>
-                    <span className='bold-text'>Price:</span> {course.price}
+                    <span className='bold-text'>Price:</span> {course.course_price}
                 </p>
                 <p className='rating left-align'>
                     <span className='bold-text'>Rating:</span>

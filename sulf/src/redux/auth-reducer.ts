@@ -1,27 +1,29 @@
+import { userAPI } from '../service/api/user-api';
 import { Dispatch } from 'redux';
-import { fakeApi } from '../api/api';
+import { ResultCodesEnum } from '../service/types/api-types';
+import { authAPI } from '../service/api/auth-api';
+import { RegistrationDataType, LoginDataType, UserType } from '../types';
 import { ActionsTypes } from './redux-store';
 
 const initialState = {
-	userId: null as number | null,
-	name: null as string | null,
-	surname: null as string | null,
+	user_id: null as number | null,
+	first_name: null as string | null,
+	last_name: null as string | null,
 	email: null as string | null,
-	password: null as string | null,
+	disabled: null as boolean | null,
+	image: null as string | null,
+	registration_date: null as string | null,
 	userRole: 'admin' as string | null,
 	isAuth: false as boolean,
 };
 
 type InitialStateType = typeof initialState;
-
-const testData = {
-	email: 'first.user@test.com',
-	password: 'admin',
-};
+type ActionsType = ActionsTypes<typeof actions>;
+type DispatchType = Dispatch<ActionsType>;
 
 const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
 	switch (action.type) {
-        case 'AUTH/SET_USER_DATA':
+		case 'AUTH/SET_USER_DATA':
 			return {
 				...state,
 				...action.data,
@@ -30,68 +32,88 @@ const authReducer = (state = initialState, action: ActionsType): InitialStateTyp
 			return state;
 	}
 };
-type ActionsType = ActionsTypes<typeof actions>;
 
 export const actions = {
-    setAuthUserData: (userId: number | null, name: string | null, surname: string | null, email: string | null, password: string | null, isAuth: boolean) => {
+	setAuthUserData: (data: UserType, isAuth: boolean) => {
 		return {
 			type: 'AUTH/SET_USER_DATA',
-			data: { userId, name, surname, email, password, isAuth },
+			data: { ...data, isAuth },
 		} as const;
 	},
 };
 
-type DispatchType = Dispatch<ActionsType>;
-
 export const authUserThunk = () => {
-    return async (dispatch: DispatchType) => {
-        return initialState.isAuth;
-		// let data = await authAPI.setAuthUser();
-		// if(data.resultCode === ResultCodesEnum.Success) {
-		//     let {id, email, login} = data.data;
-		//     dispatch(actions.setAuthUserData(id, email, login, true));
-		// }
+	return async (dispatch: DispatchType) => {
+		try {
+			const res = await userAPI.getUserData();
+			if (res.status === ResultCodesEnum.Success) {
+				const { user_id, first_name, last_name, email, disabled, image, registration_date } = res.data.user;
+				const userData = {
+					user_id,
+					first_name,
+					last_name,
+					email,
+					disabled,
+					image,
+					registration_date,
+				};
+				dispatch(actions.setAuthUserData(userData, true));
+			} else {
+				console.log('Some error occurred, please try again');
+			}
+		} catch (e: any) {
+			if (e.response.status === ResultCodesEnum.UserAlreadyExist) alert('User already exist, please select another email');
+			else console.log('Some error occurred, please try again');
+		}
 	};
 };
 
-export const registration = (name: string, surname: string, email: string, password: string) => {
+export const registration = (data: RegistrationDataType) => {
 	return async (dispatch: DispatchType) => {
-		setTimeout(() => {
-			dispatch(actions.setAuthUserData(1, name, surname, email, password, true))
-			alert('Registration completed')
-		}, 1000);
-    };
+		try {
+			let res = await authAPI.registration(data);
+			if (res.status === ResultCodesEnum.Success) {
+				localStorage.setItem('token', res.data.access_token);
+				//@ts-ignore
+				dispatch(authUserThunk());
+			}
+		} catch (e: any) {
+			if (e.response.status === ResultCodesEnum.UserAlreadyExist) alert('User already exist, please select another email');
+			else alert('Some error occurred, please try again');
+		}
+	};
 };
 
-export const login = (email: string, password: string) => {
+export const login = (data: LoginDataType) => {
 	return async (dispatch: DispatchType) => {
-		if (email === testData.email && password === testData.password) {
-			setTimeout(() => {
-				dispatch(actions.setAuthUserData(1, 'Dan', 'Kosinskiy', email, password, true))
-				alert('Login completed')
-			}, 1000);
-		} else {
-			alert('Login failed')
+		try {
+			const res = await authAPI.login(data);
+			if (res.status === ResultCodesEnum.Success) {
+				localStorage.setItem('token', res.data.access_token);
+				//@ts-ignore
+				dispatch(authUserThunk());
+			}
+		} catch (e: any) {
+			if (e.response.status === ResultCodesEnum.WrongData || e.response.status === ResultCodesEnum.Error)
+				alert(`Email and password don't match, please try again`);
+			else alert('Some error occurred, please try again');
 		}
-
-		// let data = await authAPI.login(email, password, rememberMe, captcha);
-		// if(data.resultCode === ResultCodesEnum.Success) {
-		//     dispatch(authUserThunk());
-		// } else {
-		//     if(data.resultCode === ResultCodeForCapthcaEnum.CaptchaIsRequired) {
-		//         dispatch(getCaptchaUrl());
-		//     }
-		//     let message = data.messages.length > 0 ? data.messages[0] : "Some error";
-		//     dispatch(stopSubmit("Login", {_error: message}))
-		// }
-    };
+	};
 };
 
 export const logout = () => {
 	return async (dispatch: DispatchType) => {
-		dispatch(actions.setAuthUserData(null, null, null, null, null, false))
-		//let data = await authAPI.logout();
-		//dispatch(actions.setAuthUserData(null, null, null, false))
+		localStorage.removeItem('token');
+		const userData = {
+			user_id: null,
+			first_name: null,
+			last_name: null,
+			email: null,
+			disabled: null,
+			image: null,
+			registration_date: null,
+		};
+		dispatch(actions.setAuthUserData(userData, false));
 	};
 };
 

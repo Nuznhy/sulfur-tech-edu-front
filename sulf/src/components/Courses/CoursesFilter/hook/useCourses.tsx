@@ -6,8 +6,8 @@ export const useSortedCourses = (courses: Array<CourseType>, minPrice: string, m
 		if (minPrice || maxPrice || rating) {
 			return [...courses].filter(
 				(course) =>
-					(minPrice !== '' ? course.price >= Number(minPrice) : course) &&
-					(maxPrice !== '' ? course.price <= Number(maxPrice) : course) &&
+					(minPrice !== '' ? course.course_price >= Number(minPrice) : course) &&
+					(maxPrice !== '' ? course.course_price <= Number(maxPrice) : course) &&
 					(rating !== '' ? course.rating === Number(rating) : course)
 			);
 		}
@@ -21,7 +21,7 @@ export const useCourses = (courses: Array<CourseType>, query: string, minPrice: 
 	const sortedCourses = useSortedCourses(courses, minPrice, maxPrice, rating);
 
 	const sortedAndSearchedCourses = useMemo(() => {
-		return sortedCourses.filter((course) => course.title?.toLowerCase().includes(query.toLowerCase()));
+		return sortedCourses.filter((course) => course.course_name?.toLowerCase().includes(query.toLowerCase()));
 	}, [query, sortedCourses]);
 
 	return sortedAndSearchedCourses;

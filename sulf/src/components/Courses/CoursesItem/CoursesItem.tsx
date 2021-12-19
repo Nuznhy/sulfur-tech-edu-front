@@ -18,15 +18,15 @@ const CoursesItem = memo(() => {
 	const course = getCourseById(Number(history.location.pathname.split('/')[2]))[0];
 
 	const userCourses = useSelector(getUserCourses);
-	const isCurrentCourse = userCourses.find((c) => c.id === course.id);
+	const isCurrentCourse = userCourses.find((c) => c.course_id === course.course_id);
 
 	const handleAddCourse = () => {
-		addUserCourse(userId, course.id);
+		addUserCourse(userId, course.course_id);
 		alert('You have successfully enrolled in this course');
 	};
 
 	const handleDeleteCourse = () => {
-		removeUserCourse(userId, course.id);
+		removeUserCourse(userId, course.course_id);
 		alert('You have successfully removed this course');
 	};
 
@@ -63,10 +63,10 @@ const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleA
 			</div>
 			<div className='text-container'>
 				<p className='title'>
-					<span className='bold-text'>Name:</span> {course.title}
+					<span className='bold-text'>Name:</span> {course.course_name}
 				</p>
 				<p className='description'>
-					<span className='bold-text'>Description:</span> {course.description}
+					<span className='bold-text'>Description:</span> {course.course_description}
 				</p>
 				<p className='status'>
 					<span className='bold-text'>Status:</span> {isCurrentCourse ? 'Enrolled' : 'Not enrolled'}

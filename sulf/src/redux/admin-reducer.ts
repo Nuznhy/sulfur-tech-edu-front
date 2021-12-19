@@ -1,6 +1,8 @@
+import { CoursesDataType } from './../types/index';
 import { CourseType } from '../types';
 import { ActionsTypes } from './redux-store';
 import { Dispatch } from 'redux';
+import { courseAPI } from '../service/api/course-api';
 
 const initialState = {
 	courses: [] as Array<CourseType> | [],
@@ -33,9 +35,10 @@ export const actions = {
 
 type DispatchType = Dispatch<ActionsType>;
 
-export const getCourses = () => {
+export const getCourses = (data: CoursesDataType) => {
 	return async (dispatch: DispatchType) => {
-		//const data = await courseAPI.getCourses();
+		const res = await courseAPI.getAllCourses(data);
+		console.log(res);
 		//dispatch(actions.getCourses(courses: data));
 	};
 };
@@ -44,14 +47,14 @@ export const addCourse = (title: string, description: string, price: string) => 
     console.log(title, description, price);
 	return async (dispatch: DispatchType) => {
 		//await courseAPI.addCourse(title, description, price);
-		getCourses();
+		//getCourses();
 	};
 };
 
 export const removeCourse = (courseId: number) => {
 	return async (dispatch: DispatchType) => {
 		//await courseAPI.removeCourse(courseId);
-		getCourses();
+		//getCourses();
 	};
 };
 
@@ -59,7 +62,7 @@ export const updateCourse = (courseId: number, title: string, description: strin
     console.log(courseId, title, description, price);
 	return async (dispatch: DispatchType) => {
 		//await courseAPI.updateCourse(courseId, title, description, price);
-		getCourses();
+		//getCourses();
 	};
 };
 

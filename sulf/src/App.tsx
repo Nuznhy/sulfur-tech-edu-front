@@ -20,7 +20,9 @@ const App: React.FC = memo(() => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(authUserThunk())
+		const token = localStorage.getItem('token');
+		// console.log(token);
+		token && dispatch(authUserThunk());
 	}, [])
 		
 	return (

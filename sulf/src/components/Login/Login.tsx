@@ -25,7 +25,8 @@ const Login: React.FC = memo(() => {
 	});
 
 	const onSubmit = (values: FormTypes, props: any) => {
-		dispatch(login(values.email, values.password))
+		const { email, password } = values;
+		dispatch(login({email, password}))
 		props.resetForm();
 		props.setSubmitting(false);
 	};
