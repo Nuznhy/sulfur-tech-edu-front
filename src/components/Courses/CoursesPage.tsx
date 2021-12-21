@@ -9,15 +9,16 @@ import { useSelector } from 'react-redux';
 import { courseAPI } from '../../service/api/course-api';
 import Preloader from '../Preloader/Preloader';
 import { useLocation } from 'react-router-dom';
+import { CourseType } from '../../types';
 
 const CoursesPage: React.FC = memo(() => {
 	const [filter, setFilter] = useState({ query: '', minPrice: '', maxPrice: '', rating: '' });
-	const [courses, setCourses] = useState(useSelector(getAllCourses));
+	const [courses, setCourses] = useState<Array<CourseType>>();
 	const [pageCount, setPageCount] = useState(useSelector(getPageCount));
 	const [isLoading, setIsLoading] = useState(false);
 	const location = useLocation();
 	
-	const sortedAndSearchedCourses = useCourses(courses, filter.query, filter.minPrice, filter.maxPrice, filter.rating);
+	const sortedAndSearchedCourses = useCourses(courses ? courses : [], filter.query, filter.minPrice, filter.maxPrice, filter.rating);
     
     useEffect(() => {
 		fetchCourses();
@@ -26,6 +27,7 @@ const CoursesPage: React.FC = memo(() => {
 	const fetchCourses = async () => {
 		setIsLoading(true);
 		const res = await courseAPI.getAllCourses({ name: '', minimal_rating: 0, min_price: 0, max_price: 99999, page: 1, per_page: 100 });
+		console.log(res);
         setCourses([...res.data.courses]); 
         setPageCount(res.data.courses.length);
 		setIsLoading(false);

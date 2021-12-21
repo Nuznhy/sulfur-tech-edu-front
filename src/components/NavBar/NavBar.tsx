@@ -17,9 +17,6 @@ const NavBar: React.FC = memo(() => {
 					<NavLink to='/courses' className='link'>
 						Courses
 					</NavLink>
-					<NavLink to='/settings' className='link'>
-						Settings
-					</NavLink>
 				</div>
 			) : (
 				<div className='login-navbar'>

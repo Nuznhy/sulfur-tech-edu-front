@@ -129,4 +129,16 @@ export const addSolutionMark = (task_id: number, mark: number, user_id: number) 
 	};
 };
 
+export const addCourseRate = (course_id: number, rate: number) => {
+	return async () => {
+		try {
+			const res = await courseAPI.createCourseRate(course_id, rate);
+			console.log(res);
+			res.status === ResultCodesEnum.Success && alert('Rate send successfully!');
+		} catch (e) {
+			alert('Some error occurred, please try again');
+		}
+	};
+};
+
 export default adminReducer;

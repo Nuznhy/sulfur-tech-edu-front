@@ -3,6 +3,8 @@ import { ActionsTypes } from './redux-store';
 import { Dispatch } from 'redux';
 import { courseAPI } from '../service/api/course-api';
 import { ResultCodesEnum } from '../service/types/api-types';
+import { userAPI } from '../service/api/user-api';
+import { authUserThunk } from './auth-reducer';
 
 const initialState = {
 	userCourses: [] as Array<CourseType> | [],
@@ -70,5 +72,19 @@ export const removeUserCourse = (courseId: number) => {
 		}
 	};
 };
+
+export const uploadUserImage = (image: string) => {
+	return async (dispatch: DispatchType) => {
+		try {
+			const res = await userAPI.uploadUserIcon(image);
+			console.log(res);
+			//@ts-ignore
+			dispatch(authUserThunk());
+			res.status === ResultCodesEnum.Success && alert('You have successfully upload image');
+		} catch (e) {
+			alert('Some error occurred, please try again');
+		}
+	};
+}
 
 export default userReducer;

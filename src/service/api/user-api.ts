@@ -7,4 +7,10 @@ export const userAPI = {
 		const res = await $api.get('user/profile');
 		return res;
 	},
+	async uploadUserIcon(image: string): Promise<AxiosResponse<getUserDataResponseType>> {
+		//@ts-ignore
+		const res = await $api.put('user/avatar-upload', { image });
+		//@ts-ignore
+		return res;
+	}
 };

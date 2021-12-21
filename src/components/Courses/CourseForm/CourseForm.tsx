@@ -136,8 +136,6 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 		props.setSubmitting(false);
 	};
 
-	console.log(course);
-
 	if (!isAuth) return <Redirect to='/authentication/login' />;
 
 	return (
@@ -199,19 +197,23 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 									course.tasks?.map((t) => {
 										return (
 											<div>
+												<p className='task-title-link'>Task file: </p>
 												<p className='task-title' onClick={() => onDownloadTask(t.task_id)}>
-													{t.name}
+													Task №{t.task_id}: {t.name}
 												</p>
-												<p>Solutions:</p>
+												<p className='task-title-link'>Solutions:</p>
 												{t.solution.map((s) => {
 													return (
 														<>
 															<div className='solution-container'>
-																<p className='download-solution' onClick={() => onDownloadTaskSolution(t.task_id, s.user_id)}>Download solution send by {s.user_name}</p>
+																<div>
+																	<p className='solution-send-by'>Solution send by {s.user_name}</p>
+																	<p className='task-title' onClick={() => onDownloadTaskSolution(t.task_id, s.user_id)}>Download</p>
+																</div>
 																<p className='solution-mark'>{s.grade ? s.grade : 0}/{t.max_grade}</p>
 															</div>
 															<p className='set-mark' onClick={() => onSendMark(t.task_id, s.user_id, t.max_grade)}>Set Mark</p>
-															<input type='number' value={mark} onChange={(e: any) => setMark(e.target.value)} />
+															<input type='number' className='set-mark-field' value={mark} onChange={(e: any) => setMark(e.target.value)} />
 														</>
 													);
 												})}

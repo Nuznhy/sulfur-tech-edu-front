@@ -57,6 +57,7 @@ export const authUserThunk = () => {
 	return async (dispatch: DispatchType) => {
 		try {
 			const res = await userAPI.getUserData();
+			console.log(res);
 			if (res.status === ResultCodesEnum.Success) {
 				const { user_id, first_name, last_name, email, disabled, image, registration_date } = res.data.user;
 				const userData = {
