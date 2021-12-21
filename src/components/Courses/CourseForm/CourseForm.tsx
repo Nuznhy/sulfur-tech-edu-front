@@ -119,8 +119,8 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 	};
 
 	const onDownloadTaskSolution = async (task_id: number, uploadedByUserId: number) => {
-		const res = await courseAPI.getTaskSolutionTask(task_id, uploadedByUserId, userId as number);
-		saveAs(`https://sulfur-tech-edu.herokuapp.com/course/task/download-solution-file/${task_id}?user_id=${userId}&current_user_id=${uploadedByUserId}`);
+		const res = await courseAPI.getTaskSolutionTask(task_id, uploadedByUserId);
+		saveAs(`https://sulfur-tech-edu.herokuapp.com/course/task/download-solution-file/${task_id}?user_id=${uploadedByUserId}`);
 		alert('You have downloaded file');
 	};
 
