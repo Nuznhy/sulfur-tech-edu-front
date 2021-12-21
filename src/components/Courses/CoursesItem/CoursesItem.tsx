@@ -150,7 +150,7 @@ const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleA
 				</div>
 				<div>
 					{
-						course && course.tasks && course.tasks.map(t => {
+						course && course.tasks && course.tasks.map((t, index) => {
 							return (
 								<div className='task-container'>
 									<p className='task-title'>Download task:</p>

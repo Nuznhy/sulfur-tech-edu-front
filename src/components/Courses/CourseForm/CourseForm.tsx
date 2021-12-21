@@ -194,12 +194,12 @@ const CourseForm: React.FC<PropsType> = memo(({ course }) => {
 								</div>
 
 								{course &&
-									course.tasks?.map((t) => {
+									course.tasks?.map((t, index) => {
 										return (
 											<div>
 												<p className='task-title-link'>Task file: </p>
 												<p className='task-title' onClick={() => onDownloadTask(t.task_id)}>
-													Task №{t.task_id}: {t.name}
+													Task №{index+1}: {t.name}
 												</p>
 												<p className='task-title-link'>Solutions:</p>
 												{t.solution.map((s) => {
