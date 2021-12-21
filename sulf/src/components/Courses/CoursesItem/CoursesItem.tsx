@@ -4,10 +4,14 @@ import { addUserCourse, removeUserCourse } from '../../../redux/user-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserCourses } from '../../../redux/user-selectors';
 import './CoursesItem.sass';
-import { getIsAuth, getUserRole } from '../../../redux/auth-selectors';
+import { getIsAuth, getUserId, getUserName } from '../../../redux/auth-selectors';
 import { CourseType } from '../../../types';
-import CourseForm from '../CourseForm/CourseForm';
+import CourseForm, { convertToBase64 } from '../CourseForm/CourseForm';
 import { courseAPI } from '../../../service/api/course-api';
+import Preloader from '../../Preloader/Preloader';
+import { Button } from '@material-ui/core';
+import { addTaskSolution } from '../../../redux/admin-reducer';
+import { saveAs } from 'file-saver';
 
 const CoursesItem = memo(() => {
 	const [course, setCourse] = useState<CourseType>({
@@ -19,10 +23,12 @@ const CoursesItem = memo(() => {
 		rating: 0,
 		creator_id: 0,
 		image: '',
+		completed: false,
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const isAuth = useSelector(getIsAuth);
-	const isAdmin = useSelector(getUserRole) === 'admin';
+
+	const isAdmin = useSelector(getUserId) === course.creator_id;
 
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -57,7 +63,7 @@ const CoursesItem = memo(() => {
 	return (
 		<div className='container'>
 			{isLoading ? (
-				<div>Loading</div>
+				<Preloader />
 			) : isAdmin ? (
 				<CourseForm course={course} />
 			) : (
@@ -80,6 +86,40 @@ type CourseInfoType = {
 };
 
 const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleAddCourse, handleDeleteCourse }) => {
+	const [taskSolutionFile, setTaskSolutionFile] = useState<string>();
+	const [fileName, setFileName] = useState<string>();
+	const userName = useSelector(getUserName);
+	const userId = useSelector(getUserId);
+	const dispatch = useDispatch();
+	const history = useHistory();
+
+	const fileUpload = async (e: any) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		const base64Image = (await convertToBase64(file)) as string;
+		setFileName(file.name);
+		setTaskSolutionFile(base64Image.split(',')[1]);
+	};
+
+	const onAddTaskSolution = (taskId: number) => {
+		dispatch(addTaskSolution(taskId, taskSolutionFile as string, fileName as string, userName as string));
+		history.push('/courses');
+	};
+
+	const onDownloadTask = async (task_id: number) => {
+		const res = await courseAPI.getTaskFile(task_id, userId as number);
+		saveAs(`https://sulfur-tech-edu.herokuapp.com/course/task/download-task-file/${task_id}`);
+		alert('You have downloaded file');
+	};
+
+	const onDownloadTaskSolution = async (task_id: number, uploadedByUserId: number) => {
+		const res = await courseAPI.getTaskSolutionTask(task_id, uploadedByUserId, userId as number);
+		saveAs(`https://sulfur-tech-edu.herokuapp.com/course/task/download-solution-file/${task_id}`);
+		alert('You have downloaded file');
+	};
+
+	console.log(course);
+
 	return (
 		<div className='course'>
 			<div className='photo-container'>
@@ -95,6 +135,9 @@ const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleA
 				<p className='status'>
 					<span className='bold-text'>Status:</span> {isCurrentCourse ? 'Enrolled' : 'Not enrolled'}
 				</p>
+				<p className='status'>
+					<span className='bold-text'>Completed:</span> {course.completed ? 'Yes' : 'No'}
+				</p>
 				<div className='btn-container'>
 					{isCurrentCourse ? (
 						<button className='btn red-btn' onClick={handleDeleteCourse}>
@@ -105,6 +148,39 @@ const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleA
 							Add course
 						</button>
 					)}
+				</div>
+				<div>
+					{
+						course && course.tasks && course.tasks.map(t => {
+							return (
+								<div className='task-container'>
+									<p className='task-title'>Download task:</p>
+									<p className='task_title_text' onClick={() => onDownloadTask(t.task_id)}>{t.name}</p>
+									<p>Solutions:</p>
+										{t && t.solution && t.solution.map((s) => {
+											return (
+												<div>
+													<p className='download-solution' onClick={() => onDownloadTaskSolution(t.task_id, s.user_id)}>Download current solution</p>
+												</div>
+											);
+										})}
+
+									<input className='formik-field' type='file' onChange={(e) => fileUpload(e)} />
+
+									<div className='btn-container'>
+										<Button
+											onClick={() => onAddTaskSolution(t.task_id)}
+											className='form-btn'
+											type='submit'
+											variant='contained'
+										>
+											{'Create Solution'}
+										</Button>
+									</div>
+								</div>
+							)
+						})
+					}
 				</div>
 			</div>
 		</div>

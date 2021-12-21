@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import store from './redux/redux-store';
 import './App.sass';
 import Profile from './components/Profile/Profile';
-import { actions } from './redux/auth-reducer';
+import { actions, authUserThunk } from './redux/auth-reducer';
 import { getIsAuth } from './redux/auth-selectors';
 import CoursesPage from './components/Courses/CoursesPage';
 import Header from './components/Header/Header';
@@ -22,7 +22,7 @@ const App: React.FC = memo(() => {
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		// console.log(token);
-		token && dispatch(actions.setAuthUser(true));
+		token && dispatch(authUserThunk());
 	}, [])
 		
 	return (

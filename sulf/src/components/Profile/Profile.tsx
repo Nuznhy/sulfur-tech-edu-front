@@ -11,6 +11,7 @@ import './Profile.sass';
 import { getAllUserCourses } from '../../redux/user-reducer';
 import { courseAPI } from '../../service/api/course-api';
 import { CourseType } from '../../types';
+import Preloader from '../Preloader/Preloader';
 
 const Profile: React.FC = memo(() => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,7 @@ const Profile: React.FC = memo(() => {
 	};
 
 	const fetchCourser = async () => {
-		setIsLoading(true);
+		//setIsLoading(true);
 		const res = await courseAPI.getUserCourses();
 		setUserCourses([...res.data.courses]);
 		dispatch(getAllUserCourses());
@@ -35,7 +36,7 @@ const Profile: React.FC = memo(() => {
 	};
 
 	return isLoading ? (
-		<div>Loading</div>
+		<Preloader />
 	) : (
 		<div className='profile-container'>
 			<div className='avatar-container'>

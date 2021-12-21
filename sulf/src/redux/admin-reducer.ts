@@ -55,11 +55,11 @@ export const getCourseById = (id: number) => {
 	};
 };
 
-export const addCourse = (title: string, description: string, price: number) => {
+export const addCourse = (title: string, description: string, price: number, drive_link: string, image: string | null) => {
 	console.log(title, description, price);
 	return async () => {
 		try {
-			const res = await courseAPI.createCourse(title, price, description);
+			const res = await courseAPI.createCourse(title, price, description, drive_link, image);
 			console.log(res);
 			res.status === ResultCodesEnum.Success && alert('Course created successfully!');
 		} catch (e) {
@@ -89,6 +89,42 @@ export const updateCourse = (courseId: number, title: string, description: strin
 			res.status === ResultCodesEnum.Success && alert('Course updated successfully!');
 		} catch (e) {
 			alert(`Can't update this course because user didn't create it`);
+		}
+	};
+};
+
+export const addTask = (course_id: number, name: string, max_grade: number, file: string | null, file_name: string) => {
+	return async () => {
+		try {
+			const res = await courseAPI.createCourseTask(course_id, Number(max_grade), name, file, file_name); 
+			console.log(res);
+			res.status === ResultCodesEnum.Success && alert('Task created successfully!');
+		} catch (e) {
+			alert('Some error occurred, please try again');
+		}
+	};
+};
+
+export const addTaskSolution = (task_id: number, solution_file: string, file_name: string, user_name: string) => {
+	return async () => {
+		try {
+			const res = await courseAPI.createCourseSolution(task_id, solution_file, file_name, user_name); 
+			console.log(res);
+			res.status === ResultCodesEnum.Success && alert('Solution created successfully!');
+		} catch (e) {
+			alert('Some error occurred, please try again');
+		}
+	};
+};
+
+export const addSolutionMark = (task_id: number, mark: number, user_id: number) => {
+	return async () => {
+		try {
+			const res = await courseAPI.createCourseMark(task_id, mark, user_id ); 
+			console.log(res);
+			res.status === ResultCodesEnum.Success && alert('Mark send successfully!');
+		} catch (e) {
+			alert('Some error occurred, please try again');
 		}
 	};
 };

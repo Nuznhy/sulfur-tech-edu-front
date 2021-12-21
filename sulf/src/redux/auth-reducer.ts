@@ -13,7 +13,7 @@ const initialState = {
 	disabled: null as boolean | null,
 	image: null as string | null,
 	registration_date: null as string | null,
-	userRole: 'admin' as string | null,
+	userRole: 's' as string | null,
 	isAuth: false as boolean,
 };
 
@@ -103,7 +103,7 @@ export const login = (data: LoginDataType) => {
 				localStorage.setItem('token', res.data.access_token);
 				//@ts-ignore
 				dispatch(authUserThunk());
-			}
+			} else if (res.status === ResultCodesEnum.WrongData) alert('User not found');
 		} catch (e: any) {
 			if (e.response.status === ResultCodesEnum.WrongData || e.response.status === ResultCodesEnum.Error)
 				alert(`Email and password don't match, please try again`);

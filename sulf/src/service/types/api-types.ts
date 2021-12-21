@@ -53,3 +53,9 @@ export type deleteCourseByIdResponseType = {
 	message: string;
 	status: number;
 };
+
+export type getCreateTaskResponseType = {
+	success: string;
+	message: string;
+	status: number;
+}

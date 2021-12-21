@@ -7,6 +7,24 @@ export type CourseType = {
 	rating: number;
 	creator_id: number;
 	image: string;
+	tasks?: Array<TaskType>;
+	completed: boolean;
+};
+
+export type TaskType = {
+	name: string;
+	task_id: number;
+	max_grade: number;
+	task_file: string;
+	solution: Array<SolutionType>;
+};
+
+export type SolutionType = {
+	user_id: number;
+	task_id: number;
+	grade: number;
+	task_file: string;
+	user_name: string;
 };
 
 export type UserType = {

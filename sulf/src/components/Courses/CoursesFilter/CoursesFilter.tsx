@@ -15,7 +15,6 @@ type PropsType = {
 
 const CoursesFilter: React.FC<PropsType> = memo(({ filter, setFilter }) => {
 	const history = useHistory();
-	const isAdmin = useSelector(getUserRole) === 'admin';
 
 	return (
 		<div className='filter-container'>
@@ -50,13 +49,11 @@ const CoursesFilter: React.FC<PropsType> = memo(({ filter, setFilter }) => {
 				<p className='filter-title'>Rating</p>
 				<RatingFilter value={filter.rating} onChange={(e: string) => setFilter({ ...filter, rating: e })} />
 			</div>
-			{isAdmin && (
-				<div>
-					<Button onClick={() => history.push(`/create-course`)} className='create-course-btn'>
-						Create course
-					</Button>
-				</div>
-			)}
+			<div>
+				<Button onClick={() => history.push(`/create-course`)} className='create-course-btn'>
+					Create course
+				</Button>
+			</div>
 		</div>
 	);
 });
