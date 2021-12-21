@@ -10,6 +10,7 @@ export type CourseType = {
 	tasks?: Array<TaskType>;
 	completed: boolean;
 	rate: number;
+	drive_link: string;
 };
 
 export type TaskType = {

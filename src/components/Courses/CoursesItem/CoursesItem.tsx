@@ -25,6 +25,7 @@ const CoursesItem = memo(() => {
 		image: '',
 		completed: false,
 		rate: 0,
+		drive_link: ''
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const isAuth = useSelector(getIsAuth);
@@ -136,6 +137,9 @@ const CourseInfo: React.FC<CourseInfoType> = ({ course, isCurrentCourse, handleA
 				</p>
 				<p className='status'>
 					<span className='bold-text'>Completed:</span> {course.completed ? 'Yes' : 'No'}
+				</p>
+				<p className='status'>
+					<a className='bold-text' href={course.drive_link}>Course Materials</a>
 				</p>
 				<div className='btn-container'>
 					{isCurrentCourse ? (
