@@ -63,7 +63,7 @@ export const courseAPI = {
 		return res;
 	},
 	async getTaskSolutionTask(taskId: number, userId: number, currentUserId: number): Promise<AxiosResponse<getCreateTaskResponseType>> {
-		const res = await $api.get(`course/task/download-solution-file/${taskId}?user_id=${userId}&current_user_id${currentUserId}`, {
+		const res = await $api.get(`course/task/download-solution-file/${taskId}?user_id=${userId}&current_user_id=${currentUserId}`, {
 			headers: {
 				'user-id': `${userId}`,
 				'current-user-id': `${currentUserId}`
